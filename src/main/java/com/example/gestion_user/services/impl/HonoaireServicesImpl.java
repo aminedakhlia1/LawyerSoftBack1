@@ -1,4 +1,4 @@
-package com.example.gestion_user.servicesImpl;
+package com.example.gestion_user.services.impl;
 
 import com.example.gestion_user.entities.Affaire;
 import com.example.gestion_user.entities.Honoraire;

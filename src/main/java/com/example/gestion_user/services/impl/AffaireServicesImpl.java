@@ -1,7 +1,7 @@
-package com.example.gestion_user.servicesImpl;
+package com.example.gestion_user.services.impl;
 
 import com.example.gestion_user.entities.Affaire;
-import com.example.gestion_user.entities.Tribunal;
+import com.example.gestion_user.models.request.cases.NewCaseDto;
 import com.example.gestion_user.repositories.AffaireRepository;
 import com.example.gestion_user.repositories.TribunalRepository;
 import com.example.gestion_user.services.AffaireService;
@@ -16,26 +16,29 @@ import java.util.List;
 public class AffaireServicesImpl implements AffaireService {
 
     @Autowired
-    AffaireRepository affaireRepository ;
+    AffaireRepository affaireRepository;
 
     @Autowired
-    TribunalRepository tribunalRepository ;
+    TribunalRepository tribunalRepository;
 
-   @Override
-    public Affaire addAffaire(Affaire affaire) {
-        return affaireRepository.save(affaire) ;
+    @Override
+    public Affaire addAffaire(NewCaseDto newCaseDto) {
+        Affaire affaire = new Affaire();
+        affaire.setTitre(newCaseDto.getTitre());
+        return affaireRepository.save(affaire);
     }
-   /* public Affaire addAffaire(Affaire affaire, Integer idTribunal) {
-        Tribunal tribunal = tribunalRepository.findById(idTribunal).orElse(null);
-        if (tribunal != null) {
-            affaire.setTribunal(tribunal);
-            tribunal.getAffaires().add(affaire);
-            affaireRepository.save(affaire);
-            tribunalRepository.save(tribunal);
-            return affaire;
-        }
-        return null;
-    }*/
+
+    /* public Affaire addAffaire(Affaire affaire, Integer idTribunal) {
+         Tribunal tribunal = tribunalRepository.findById(idTribunal).orElse(null);
+         if (tribunal != null) {
+             affaire.setTribunal(tribunal);
+             tribunal.getAffaires().add(affaire);
+             affaireRepository.save(affaire);
+             tribunalRepository.save(tribunal);
+             return affaire;
+         }
+         return null;
+     }*/
     @Override
     public List<Affaire> retrieveAllAffaires() {
         return affaireRepository.findAll();
@@ -53,7 +56,7 @@ public class AffaireServicesImpl implements AffaireService {
 
     @Override
     public Affaire retrieveAffaire(Integer idAffaire) {
-        return affaireRepository.findById(idAffaire).get() ;
+        return affaireRepository.findById(idAffaire).get();
     }
 
     @Override

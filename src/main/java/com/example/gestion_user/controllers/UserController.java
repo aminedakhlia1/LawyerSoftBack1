@@ -33,10 +33,10 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 
 @RestController
-@RequestMapping(path = { "/", "/user"})
+@RequestMapping(path = {"/", "/user"})
 //@CrossOrigin("http://localhost:4200")
 
-public class UserController extends ExceptionHandling {
+public class UserController {
 
     public static final String USER_DELETED_SUCCESSFULLY = "User deleted successfully";
 
@@ -69,13 +69,13 @@ public class UserController extends ExceptionHandling {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
     }
 
-   private HttpHeaders getJwtHeader(UserPrincipal user) {
-       HttpHeaders headers = new HttpHeaders();
-       headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(user));
-       return headers;
-   }
+    private HttpHeaders getJwtHeader(UserPrincipal user) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(JWT_TOKEN_HEADER, jwtTokenProvider.generateJwtToken(user));
+        return headers;
+    }
 
-   @PostMapping("/addNewUser")
+    @PostMapping("/addNewUser")
     public ResponseEntity<User> addNewUser(@RequestParam("firstName") String firstName,
                                            @RequestParam("lastName") String lastName,
                                            @RequestParam("username") String username,
@@ -85,10 +85,10 @@ public class UserController extends ExceptionHandling {
                                            @RequestParam("isNonLocked") String isNonLocked,
                                            @RequestParam("isActive") String isActive,
                                            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage) throws UserNotFoundException, EmailExistException, IOException, UsernameExistException, NotAnImageFileException {
-        User newUser = userService.addNewUser(firstName, lastName,username, email, password, role,
+        User newUser = userService.addNewUser(firstName, lastName, username, email, password, role,
                 Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive), profileImage);
         return new ResponseEntity<>(newUser, OK);
-   }
+    }
 
     @PostMapping("/updateUser")
     public ResponseEntity<User> update(@RequestParam("currentUsername") String currentUsername,
@@ -99,7 +99,7 @@ public class UserController extends ExceptionHandling {
                                        @RequestParam("role") String role,
                                        @RequestParam("isActive") String isActive,
                                        @RequestParam("isNonLocked") String isNonLocked) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException {
-        User updatedUser = userService.updateUser(currentUsername, firstName, lastName, username,email, role, Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive));
+        User updatedUser = userService.updateUser(currentUsername, firstName, lastName, username, email, role, Boolean.parseBoolean(isNonLocked), Boolean.parseBoolean(isActive));
         return new ResponseEntity<>(updatedUser, OK);
     }
 
@@ -110,8 +110,8 @@ public class UserController extends ExceptionHandling {
     }
 
     @GetMapping("/getUserById/{id}")
-    public Optional<User> getUserById(@PathVariable("id") long id) {
-        Optional<User> user = userService.findUserById(id);
+    public User getUserById(@PathVariable("id") long id) {
+        User user = userService.findUserById(id);
         return user;
     }
 
@@ -151,11 +151,17 @@ public class UserController extends ExceptionHandling {
         try (InputStream inputStream = url.openStream()) {
             int bytesRead;
             byte[] chunk = new byte[1024];
-            while((bytesRead = inputStream.read(chunk)) > 0) {
+            while ((bytesRead = inputStream.read(chunk)) > 0) {
                 byteArrayOutputStream.write(chunk, 0, bytesRead);
             }
         }
         return byteArrayOutputStream.toByteArray();
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable("email") String email) {
+        User user = userService.findUserByEmail(email);
+        return ResponseEntity.ok().body(user);
     }
 
     /*@GetMapping("/getUserById/{userId}")

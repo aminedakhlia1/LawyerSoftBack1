@@ -18,7 +18,7 @@ public interface UserService {
 
     User findUserByEmail(String email);
 
-    public Optional<User> findUserById(long id);
+    public User findUserById(long id);
 
     public User addNewUser(String firstName, String lastName, String username, String email, String password, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, EmailExistException, UsernameExistException, IOException, NotAnImageFileException;
 
@@ -31,12 +31,10 @@ public interface UserService {
     User updateProfileImage(String username, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException;
 
 
-
     //User addNewUser(String firstName, String lastName, String username, String email, String role, boolean isNonLocked, boolean isActive, MultipartFile profileImage) throws UserNotFoundException, UsernameExistException, EmailExistException, IOException, NotAnImageFileException;
 
 
     //void resetPassword(String email) throws MessagingException, EmailNotFoundException;
-
 
 
 }

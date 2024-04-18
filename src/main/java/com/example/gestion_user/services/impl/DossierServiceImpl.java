@@ -1,4 +1,4 @@
-package com.example.gestion_user.servicesImpl;
+package com.example.gestion_user.services.impl;
 
 import com.example.gestion_user.entities.*;
 import com.example.gestion_user.repositories.DossierRepository;
@@ -34,6 +34,7 @@ public class DossierServiceImpl implements DossierService {
         //Session
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
+
         User user = userRepository.findUserByUsername(username);
 
         if (user == null) {

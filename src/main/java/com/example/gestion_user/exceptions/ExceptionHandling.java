@@ -22,7 +22,7 @@ import java.util.Objects;
 import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
-public class ExceptionHandling implements ErrorController {
+public class ExceptionHandling {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     private static final String ACCOUNT_LOCKED = "Your account has been locked. Please contact administration.";
@@ -32,6 +32,14 @@ public class ExceptionHandling implements ErrorController {
     private static final String ACCOUNT_DISABLED = "Your account has been disabled. Please contact administration.";
     private static final String ERROR_PROCESSING_FILE = "An error occurred while processing file.";
     private static final String NOT_ENOUGH_PERMISSION = "You don't have enough permission.";
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ExceptionBody> accountDisabledException(NotFoundException exception) {
+        ExceptionBody exceptionBody = new ExceptionBody();
+        exceptionBody.setStatus(404);
+        exceptionBody.setMessage(exception.getMessage());
+        return new ResponseEntity<>(exceptionBody, NOT_FOUND);
+    }
 
 
     @ExceptionHandler(DisabledException.class)
